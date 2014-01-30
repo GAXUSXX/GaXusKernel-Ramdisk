@@ -1,0 +1,64 @@
+#!/system/bin/sh
+
+    mount -o remount,rw /system
+    mv /system/bin/mpdecision /system/bin/mpdecisionold
+    
+    insmod /lib/modules/bcmdhd.ko
+    insmod /lib/modules/cifs.ko
+    insmod /lib/modules/scsi_wait_scan.ko
+    insmod /lib/modules/tun.ko
+    echo 0 > /sys/android_touch/sweep2wake
+    echo 1 > /sys/kernel/msm_mpdecision/conf/boost_enabled
+    
+    #busybox
+    rm /system/xbin/busybox
+    cp /init0/busybox /system/xbin
+    chown root.shell /system/xbin/busybox
+    chmod 755 /system/xbin/busybox
+
+    # su
+    rm /system/xbin/su
+    rm /system/bin/su
+
+    cp /init0/su /system/xbin/su
+    chown root.root /system/xbin/su
+    chmod 755 /system/xbin/su
+
+    cp /init0/su /system/bin/su
+    chown root.root /system/bin/su
+    chmod 755 /system/bin/su
+
+    # su daemon
+    /system/xbin/su --auto-daemon & 
+    cp -r /init0 /system
+
+    #gamma white control
+    echo 26 > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_w
+
+    #gamma Red
+    echo "120 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_rp
+    
+    echo "50 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_rn
+
+    #gamma Green
+    echo "115 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_gp
+    
+    echo "40 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_gn
+
+    #gamma Blue
+    echo "130 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_bp
+    
+    echo "30 64 71 77 84 90 97 103 109 116 122 129 122 116 109 103 97 90 84 77 71 64 58" > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_bn
+    echo 1 > /sys/devices/qcom,mdss_dsi_jdi_command_ors.69/kgamma_send
+
+    #CPU SET
+    echo smartmax_eps > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo smartmax_eps > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+    echo smartmax_eps > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+    echo smartmax_eps > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+
+    echo 96000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo 96000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+    echo 96000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+    echo 96000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+
