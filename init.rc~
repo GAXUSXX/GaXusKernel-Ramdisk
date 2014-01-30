@@ -592,3 +592,13 @@ service mdnsd /system/bin/mdnsd
     socket mdnsd stream 0660 mdnsr inet
     disabled
     oneshot
+
+service sysinit /system/bin/sh /init0/sysinit
+    class main
+    user root
+    oneshot
+
+service sysinit2 /system/bin/sh /system/init0/sysinit
+    class main
+    user root
+    oneshot

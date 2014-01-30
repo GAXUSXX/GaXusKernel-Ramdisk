@@ -472,7 +472,7 @@ service console /system/bin/sh
 service auditd /system/bin/auditd -k
     class main
 
-on property:ro.debuggable=1
+on property:ro.debuggable=0
     start console
 
 # adbd is controlled via property triggers in init.<platform>.usb.rc
